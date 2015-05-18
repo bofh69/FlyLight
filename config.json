@@ -1,0 +1,26 @@
+{
+  "maxHistory": 15,
+  "lamp": {
+    "port": 8899,
+    "addr": "127.0.0.1",
+    "redColour": 176,
+    "greenColour": 96,
+    "yellowColour": 128
+  },
+  "windMeeters": [
+    {
+      "url": "http://holfuy.hu/clientraw/s214/clientraw.txt",
+      "dirMin": 210,
+      "dirMax": 240,
+      "winMin": 4,
+      "winMax": 9
+    },
+    {
+      "url": "http://holfuy.hu/clientraw/s155/clientraw.txt",
+      "dirMin": 165,
+      "dirMax": 195,
+      "winMin": 5,
+      "winMax": 9
+    }
+  ]
+}
