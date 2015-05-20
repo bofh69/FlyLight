@@ -131,7 +131,9 @@ function initPoller(url, history) {
 
 function setLampColour(name, c) {
   console.log("Setting lamp to ", name)
-  sendLampCommand(0x42, 0x00, function() { sendLampCommand(0x40, c);});
+  sendLampCommand(0x25, 0x00, // Speed up/link.
+          function() { sendLampCommand(0x20, c,
+              function() { sendLampCommand(0x20, c); })});
 }
 
 function updateLamp(history) {
