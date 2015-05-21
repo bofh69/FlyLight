@@ -10,6 +10,8 @@ var http = require('http');
 var path = require('path');
 var express = require('express');
 
+var lamp = require('./lampControl');
+
 
 //
 // ## SimpleServer `SimpleServer(obj)`
@@ -27,18 +29,8 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 
-var dgram = require('dgram');
-var socket = dgram.createSocket('udp4');
-var lampBuffer = new Buffer(2);
-function sendLampCommand(c1, c2, cb) {
-  lampBuffer.writeUInt8(c1, 0);
-  lampBuffer.writeUInt8(c2, 1);
-  // lampBuffer.writeUInt8(0x55, 2);
-  // TODO: Configuration:
-  socket.send(lampBuffer, 0, lampBuffer.length, config.lamp.port, config.lamp.addr);
-  if (cb !== null) {
-    setTimeout(cb, 1000);
-  }
+function setLampColour(name, c) {
+    lamp.setLampColour(config.lamp.port, config.lamp.addr, name, c);
 }
 
 function convertKnotToMps(knot)
@@ -128,16 +120,6 @@ function pollServer(url, history) {
 function initPoller(url, history) {
   pollServer(url, history);
   setInterval(function() {pollServer(url, history)}, 60*1000);
-}
-
-function setLampColour(name, c) {
-  console.log("Setting lamp to ", name)
-  sendLampCommand(0x25, 0x00, // Speed up/link.
-          function() {
-	      for(i = 0; i < 20; i++) {
-		  sendLampCommand(0x20, c);
-	      }
-	  });
 }
 
 function updateLamp(history) {
