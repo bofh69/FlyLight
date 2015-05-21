@@ -29,13 +29,13 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
 
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
-var lampBuffer = new Buffer(3);
+var lampBuffer = new Buffer(2);
 function sendLampCommand(c1, c2, cb) {
   lampBuffer.writeUInt8(c1, 0);
   lampBuffer.writeUInt8(c2, 1);
-  lampBuffer.writeUInt8(0x55, 2);
+  // lampBuffer.writeUInt8(0x55, 2);
   // TODO: Configuration:
-  socket.send(lampBuffer, 0, 3, config.lamp.port, config.lamp.addr);
+  socket.send(lampBuffer, 0, lampBuffer.length, config.lamp.port, config.lamp.addr);
   if (cb !== null) {
     setTimeout(cb, 1000);
   }
@@ -76,6 +76,7 @@ function createWeatherFilter(cfg) {
         return false;
       }
     }
+      console.log("Windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
     if((wind < cfg.windMin) || (wind > cfg.windMax)) {
       console.log("Wrong windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
       return false;
@@ -94,7 +95,7 @@ function createHistory(filter) {
   result.addSample = function(dir, wind) {
     var result = this.filter.accept(dir, wind);
     this.history.push(result);
-    if(this.history.length > config.maxHistory) this.history.pop();
+    if(this.history.length > config.maxHistory) this.history.shift();
   };
   result.isOk = function() {
     return this.history.reduce(function(current, prev) {
@@ -132,8 +133,11 @@ function initPoller(url, history) {
 function setLampColour(name, c) {
   console.log("Setting lamp to ", name)
   sendLampCommand(0x25, 0x00, // Speed up/link.
-          function() { sendLampCommand(0x20, c,
-              function() { sendLampCommand(0x20, c); })});
+          function() {
+	      for(i = 0; i < 20; i++) {
+		  sendLampCommand(0x20, c);
+	      }
+	  });
 }
 
 function updateLamp(history) {
