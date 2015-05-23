@@ -13,6 +13,8 @@ var webhook = require('express-ifttt-webhook');
 
 var lamp = require("./lampControl");
 
+lamp.setDestination(config.lamp);
+
 //
 // ## SimpleServer `SimpleServer(obj)`
 //
@@ -29,14 +31,6 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 
-function sendLampCommand(c1, c2, cb) {
-    lamp.sendLampCommand(config.lamp.port, config.lamp.addr, c1, c2, cb);
-}
-
-function setLampColour(name, c) {
-    lamp.setLampColour(config.lamp.port, config.lamp.addr, name, c);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 router.use(webhook(
@@ -49,6 +43,6 @@ router.use(webhook(
 	    },
 	    function(json, done) {
 		console.log("Req: " & json);
-		setLampColour("some colour", json.colour);
+		lamp.setColour("some colour", json.colour);
 		done();
 	    }));

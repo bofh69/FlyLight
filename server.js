@@ -29,10 +29,6 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 
-function setLampColour(name, c) {
-    lamp.setLampColour(config.lamp.port, config.lamp.addr, name, c);
-}
-
 function convertKnotToMps(knot)
 {
   return knot/1.9438444924574;
@@ -106,7 +102,6 @@ function pollServer(url, history) {
         body += chunk;
       });
       res.on('end', function() {
-        // console.log("Got result: ", body);
         var wd = parseClientRaw(body);
         console.log("Station name: ", wd.name);
         console.log("Current direction: ", wd.dir);
@@ -114,7 +109,9 @@ function pollServer(url, history) {
         history.addSample(wd.dir, wd.avgSpeed);
       });
     }
-  });
+  }).on('error', function(e) {
+      console.log("Got error while reading weather station '" + url + "': " + e.message);
+  });;
 }
 
 function initPoller(url, history) {
@@ -124,15 +121,17 @@ function initPoller(url, history) {
 
 function updateLamp(history) {
   if(history.isOk()) {
-    setLampColour("green", config.lamp.greenColour);
+    lamp.setColour("green", config.lamp.greenColour);
   } else {
-    setLampColour("red", config.lamp.redColour);
+    lamp.setColour("red", config.lamp.redColour);
   }
 }
 
-setLampColour("yellow", config.lamp.yellowColour);
-
 ///////////////////////////////////////////////////////////////////////////////
+
+lamp.setDestination(config.lamp);
+
+lamp.setColour("yellow", config.lamp.yellowColour);
 
 var history = [];
 

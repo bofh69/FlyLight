@@ -1,6 +1,6 @@
 {
   "name": "FlyLight",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A server to control a lamp form weather-stations..",
   "main": "server.js",
   "repository": "",

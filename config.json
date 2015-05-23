@@ -1,8 +1,10 @@
 {
   "maxHistory": 15,
+  "user": "root",
+  "passwd": "root",
   "lamp": {
+    "addr": "255.255.255.255",
     "port": 8899,
-    "addr": "127.0.0.1",
     "redColour": 176,
     "greenColour": 96,
     "yellowColour": 128
