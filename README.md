@@ -1,11 +1,11 @@
 # Paragliding wind lamp
-FlyLight
+## FlyLight
  
 Our basic idea was to parse live wind data from Holfuy weather stations and return a green or red light if the wind is flyable or not at our local paragliding site. We use a normal lamp socket from IKEA and a special lightbulb system that can change color. 
  
-The code is written in javascript and can be run on most operating systems. We use a cheap Raspberry Pi in the following example.
+The code is written in JavaScript and can be run on most operating systems. We use a cheap Raspberry Pi in the following example.
  
-This is the hardware we use:
+## This is the hardware we use:
  
 - Raspberry Pi 2 model B https://www.komplett.se/raspberry-pi-2-model-b/836890
 - MiLight lightbulb http://www.ebay.com/itm/151585053073
@@ -17,7 +17,7 @@ This is the hardware we use:
 - Optional: Plastic case for the Raspberry http://www.ebay.com/itm/281657279473
  
  
-How to setup the system:
+## How to setup the system:
  
 Follow the instructions on how to write the raspian disk image to your SD-card.
 Boot your Raspberry and make sure it is connected to the Internet. You don't need a monitor and keyboard connected to the raspberry to do this. You can find plenty of guides on the Internet to do all this. Here is a good source:
@@ -43,10 +43,10 @@ node /home/pi/FlyLight/server.js
 If you want to make sure that the server is booting automatically when you reboot your Raspberry, add this line to your /etc/rc.local file.
 su pi -c 'node /home/pi/FlyLight/server.js < /dev/null &'
  
-The final step is to setup the MiLight LED-lamp and wifi-bridge.
+The final step is to setup the MiLight LED-lamp and WiFi bridge.
 Follow the instructions in this document:
 http://www.limitlessled.com/download/LimitlessLED_Wifi_Bridge_v4_Instructions_March2014.pdf
  
-Our software will use the broadcast address to communicate with the wifi bridge instead of a specific IP-address. This is good if your Raspberry and bridge are connected to the same network. You can specify a static address in config.json but there is no easy way to give the wifi-bridge a static address. One way to solve this is if you have a home router that can give out a "static" dhcp address based on MAC-address. This is one way to make sure that the wifi bridge will end up with the same IP-address after a reboot.
+Our software will use the broadcast address to communicate with the WiFi bridge instead of a specific IP-address. This is good if your Raspberry and bridge are connected to the same network. You can specify a static address in config.json but there is no easy way to give the WiFi bridge a static address. One way to solve this is if you have a home router that can give out a "static" DHCP address based on MAC-address. This is one way to make sure that the WiFi bridge will end up with the same IP-address after a reboot.
  
 Happy flying and let the green light shine bright :)
