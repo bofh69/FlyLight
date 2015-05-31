@@ -31,23 +31,6 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Server listening at", addr.address + ":" + addr.port);
 });
 
-function convertKnotToMps(knot)
-{
-  return knot/1.9438444924574;
-}
-
-function parseClientRaw(str) {
-  var result = {};
-
-  var splitBody = str.split(' ');
-  result.dir = splitBody[3];
-  result.avgSpeed = convertKnotToMps(splitBody[1]);
-  result.maxSpeed = convertKnotToMps(splitBody[2]);
-  result.name = splitBody[32].replace(/_/g, " ");
-
-  return result;
-}
-
 function createWeatherFilter(cfg) {
   var filter = {};
   
@@ -96,33 +79,19 @@ function createHistory(filter) {
   return result;
 }
 
-function pollServer(url, history) {
-  http.get(url, function(res) {
-    if (res.statusCode == 200) {
-	try {
-	    var body = "";
-	    res.on('data', function(chunk) {
-		body += chunk;
-	    });
-	    res.on('end', function() {
-		var wd = parseClientRaw(body);
-		console.log("Station name: ", wd.name);
-		console.log("Current direction: ", wd.dir);
-		console.log("Current avg: ", wd.avgSpeed);
-		history.addSample(wd.dir, wd.avgSpeed);
-	    });
-	} catch(ex) {
-	    console.log("Got error while parsing weather station '" + url + "': " + ex);
-	};
-    }
-  }).on('error', function(e) {
-      console.log("Got error while reading weather station '" + url + "': " + e.message);
-  });;
+function pollServer(cfg, history) {
+    var reader = require("./" + cfg.reader + "Reader");
+    reader.pollServer(cfg, function(wd) {
+	console.log("Station name: ", wd.name);
+	console.log("Current direction: ", wd.dir);
+	console.log("Current avg: ", wd.avgSpeed);
+	history.addSample(wd.dir, wd.avgSpeed);
+    });
 }
 
-function initPoller(url, history) {
-  pollServer(url, history);
-  setInterval(function() {pollServer(url, history)}, 60*1000);
+function initPoller(cfg, history) {
+  pollServer(cfg, history);
+  setInterval(function() {pollServer(cfg, history)}, 60*1000);
 }
 
 function updateLamp(history) {
@@ -144,7 +113,7 @@ var history = [];
 config.windMeeters.forEach(function (cfg) {
   var hist = createHistory(createWeatherFilter(cfg));
   history.push(hist);
-  initPoller(cfg.url, hist);
+  initPoller(cfg, hist);
 });
 
 var aggHistory = {};

@@ -1,7 +1,9 @@
 {
-  "maxHistory": 15,
   "user": "root",
   "passwd": "root",
+
+  "maxHistory": 15,
+
   "lamp": {
     "driver": "milightRGB",
     "channel": 1,
@@ -11,8 +13,10 @@
     "greenColour": 96,
     "yellowColour": 128
   },
+
   "windMeeters": [
     {
+      "reader": "holfuy",
       "url": "http://holfuy.hu/clientraw/s214/clientraw.txt",
       "dirMin": 210,
       "dirMax": 240,
@@ -20,6 +24,7 @@
       "windMax": 9
     },
     {
+      "reader": "holfuy",
       "url": "http://holfuy.hu/clientraw/s155/clientraw.txt",
       "dirMin": 165,
       "dirMax": 195,
