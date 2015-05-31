@@ -4,6 +4,7 @@
   "passwd": "root",
   "lamp": {
     "driver": "milightRGB",
+    "channel": 1,
     "addr": "255.255.255.255",
     "port": 8899,
     "redColour": 176,
