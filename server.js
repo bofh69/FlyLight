@@ -10,7 +10,7 @@ var http = require('http');
 var path = require('path');
 var express = require('express');
 
-var lamp = require('./lampControl');
+var lamp = require("./" + config.lamp.driver + "Controller");
 
 
 //
@@ -19,10 +19,12 @@ var lamp = require('./lampControl');
 // Creates a new instance of SimpleServer with the following options:
 //  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
 //
-var router = express();
-var server = http.createServer(router);
+var app = express();
+var server = http.createServer(app);
 
-router.use(express.static(path.resolve(__dirname, 'client')));
+app.use(express.static(path.resolve(__dirname, 'client')));
+app.set('view engine', 'jade');
+app.set('views', './views');
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   var addr = server.address();
@@ -97,17 +99,21 @@ function createHistory(filter) {
 function pollServer(url, history) {
   http.get(url, function(res) {
     if (res.statusCode == 200) {
-      var body = "";
-      res.on('data', function(chunk) {
-        body += chunk;
-      });
-      res.on('end', function() {
-        var wd = parseClientRaw(body);
-        console.log("Station name: ", wd.name);
-        console.log("Current direction: ", wd.dir);
-        console.log("Current avg: ", wd.avgSpeed);
-        history.addSample(wd.dir, wd.avgSpeed);
-      });
+	try {
+	    var body = "";
+	    res.on('data', function(chunk) {
+		body += chunk;
+	    });
+	    res.on('end', function() {
+		var wd = parseClientRaw(body);
+		console.log("Station name: ", wd.name);
+		console.log("Current direction: ", wd.dir);
+		console.log("Current avg: ", wd.avgSpeed);
+		history.addSample(wd.dir, wd.avgSpeed);
+	    });
+	} catch(ex) {
+	    console.log("Got error while parsing weather station '" + url + "': " + ex);
+	};
     }
   }).on('error', function(e) {
       console.log("Got error while reading weather station '" + url + "': " + e.message);
@@ -150,7 +156,7 @@ aggHistory.isOk = function() {
 
 setInterval(function() {updateLamp(aggHistory)}, 60*1000);
 
-router.get('/colour', function (req, res) {
+app.get('/colour', function (req, res) {
   var response = "<html><body>";
   if(aggHistory.isOk()) {
     response += "FLY";
@@ -164,4 +170,8 @@ router.get('/colour', function (req, res) {
   response += " (2) <br>";
   response += "</body></html>";
   res.send(response);
+});
+
+app.get('/', function (req, res) {
+    res.render('index', {title: 'Hej', message: 'Hello there!'});
 });

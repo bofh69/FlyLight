@@ -3,6 +3,7 @@
   "user": "root",
   "passwd": "root",
   "lamp": {
+    "driver": "milightRGB",
     "addr": "255.255.255.255",
     "port": 8899,
     "redColour": 176,

@@ -1,5 +1,5 @@
 //
-// # LampControl
+// # mightControl.
 //
 // A component to control a milight lamp.
 //
@@ -34,11 +34,40 @@ exports.sendCommand = function(c1, c2, cb) {
 }
 
 exports.setColour = function(name, c) {
-  console.log("Setting lamp to ", name)
+  console.log("Setting lamp to ", name);
+  var cmd = 0x20;
+  if(c == 256) {
+      cmd = 0xa2;
+      c = 0;
+  }
   exports.sendCommand(0x25, 0x00, // Speed up/link.
           function() {
 	      for(i = 0; i < 20; i++) {
-		  exports.sendCommand(0x20, c);
+		  exports.sendCommand(cmd, c);
 	      }
 	  });
+}
+
+exports.increaseLight = function() {
+    for(i = 0; i < 20; i++) {
+	exports.sendCommand(0x23, 0);
+    }
+}
+
+exports.decreaseLight = function() {
+    for(i = 0; i < 20; i++) {
+	exports.sendCommand(0x23, 0);
+    }
+}
+
+exports.turnOn = function() {
+    for(i = 0; i < 20; i++) {
+	exports.sendCommand(0x22, 0);
+    }
+}
+
+exports.turnOff = function() {
+    for(i = 0; i < 20; i++) {
+	exports.sendCommand(0x23, 0);
+    }
 }
