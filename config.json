@@ -30,6 +30,17 @@
       "dirMax": 195,
       "windMin": 5,
       "windMax": 9
+    },
+    {
+      "reader": "viva",
+      "url": "http://161.54.134.239/vivadata.asmx?WSDL",
+      "args": {
+          "PlatsId": 1
+      },
+      "dirMin": 165,
+      "dirMax": 166,
+      "windMin": 105,
+      "windMax": 107 
     }
   ]
 }
