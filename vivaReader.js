@@ -27,6 +27,9 @@ exports.pollServer = function(cfg, cb) {
 				wd.maxSpeed = o.Varde;
 			    }
 			});
+			if(!wd.avgSpeed) {
+			    console.log("Didn't get wanted data, got:", result.ViVaData);
+			}
 			cb(wd);
 		    }
 		} else {
