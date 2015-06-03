@@ -4,7 +4,12 @@
 // A server program to control a lamp.
 //
 
-var config = require("./config");
+var cfgname = "config";
+if(process.argv.length > 2) {
+    cfgname = process.argv[2];
+}
+
+var config = require("./" + cfgname);
 
 var http = require('http');
 var path = require('path');
