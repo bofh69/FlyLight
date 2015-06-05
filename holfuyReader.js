@@ -4,7 +4,7 @@
 // A module to read weather-data (wind direction and speed).
 //
 
-http = require("http");
+var http = require("http");
 
 function convertKnotToMps(knot)
 {
@@ -36,10 +36,10 @@ exports.pollServer = function(cfg, cb) {
 		cb(wd);
 	    });
 	} catch(ex) {
-	    console.log("Got error while parsing weather station '" + url + "': " + ex);
+	    console.log("Got error while parsing weather station '" + cfg.url + "': " + ex);
 	};
     }
   }).on('error', function(e) {
-      console.log("Got error while reading weather station '" + url + "': " + e.message);
+      console.log("Got error while reading weather station '" + cfg.url + "': " + e.message);
   });;
 }
