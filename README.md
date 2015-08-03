@@ -48,5 +48,9 @@ Follow the instructions in this document:
 http://www.limitlessled.com/download/LimitlessLED_Wifi_Bridge_v4_Instructions_March2014.pdf
  
 Our software will use the broadcast address to communicate with the WiFi bridge instead of a specific IP-address. This is good if your Raspberry and bridge are connected to the same network. You can specify a static address in config.json but there is no easy way to give the WiFi bridge a static address. One way to solve this is if you have a home router that can give out a "static" DHCP address based on MAC-address. This is one way to make sure that the WiFi bridge will end up with the same IP-address after a reboot.
+
+## Prebuilt image for the Raspberry PI
+A prebuilt image can be downloaded from:
+https://copy.com/WicKPfG0EIj39ZZ7
  
 Happy flying and let the green light shine bright :)
