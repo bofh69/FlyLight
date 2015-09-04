@@ -5,7 +5,7 @@
   "maxHistory": 15,
 
   "lamp": {
-    "driver": "milightRGB",
+    "driver": "milightRGBW",
     "channel": 1,
     "addr": "255.255.255.255",
     "port": 8899,
@@ -24,23 +24,27 @@
       "windMax": 9
     },
     {
-      "reader": "holfuy",
-      "url": "http://holfuy.hu/clientraw/s155/clientraw.txt",
-      "dirMin": 165,
-      "dirMax": 195,
-      "windMin": 5,
-      "windMax": 9
-    },
-    {
       "reader": "viva",
       "url": "http://161.54.134.239/vivadata.asmx?WSDL",
       "args": {
-          "PlatsId": 1
+          "Kommentar": "Vinga",
+          "PlatsId": 44
       },
       "dirMin": 165,
       "dirMax": 166,
       "windMin": 105,
       "windMax": 107 
+    },
+    {
+      "reader": "areWind",
+      "url": "http://www.meac.se/sub_2/hummeln/wind.asp",
+      "args": {
+          "Kommentar": "Hummeln"
+      },
+      "dirMin": 165,
+      "dirMax": 166,
+      "windMin": 1,
+      "windMax": 10 
     }
   ]
 }
