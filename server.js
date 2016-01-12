@@ -4,6 +4,8 @@
 // A server program to control a lamp.
 //
 
+var webServer = require("./webServer.js");
+
 var cfgname = "config";
 if(process.argv.length > 2) {
     cfgname = process.argv[2];
@@ -11,30 +13,7 @@ if(process.argv.length > 2) {
 
 var config = require("./" + cfgname);
 
-var http = require('http');
-var path = require('path');
-var express = require('express');
-
 var lamp = require("./" + config.lamp.driver + "Controller");
-
-
-//
-// ## SimpleServer `SimpleServer(obj)`
-//
-// Creates a new instance of SimpleServer with the following options:
-//  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
-//
-var app = express();
-var server = http.createServer(app);
-
-app.use(express.static(path.resolve(__dirname, 'client')));
-app.set('view engine', 'jade');
-app.set('views', './views');
-
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
-  console.log("Server listening at", addr.address + ":" + addr.port);
-});
 
 function createWeatherFilter(cfg) {
   var filter = {};
@@ -130,22 +109,4 @@ aggHistory.isOk = function() {
 
 setInterval(function() {updateLamp(aggHistory)}, 60*1000);
 
-app.get('/colour', function (req, res) {
-  var response = "<html><body>";
-  if(aggHistory.isOk()) {
-    response += "FLY";
-  } else {
-    response += "DONT FLY";
-  }
-  response += "<br>";
-  response += history[0].history.join(" (1) <br>");
-  response += " (1) <br>";
-  response += history[1].history.join(" (2) <br>");
-  response += " (2) <br>";
-  response += "</body></html>";
-  res.send(response);
-});
-
-app.get('/', function (req, res) {
-    res.render('index', {title: 'Hej', message: 'Hello there!'});
-});
+webServer.init(config, aggHistory);

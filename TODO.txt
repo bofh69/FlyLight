@@ -1,0 +1,34 @@
+Services:
+GET svc/listSensors
+  - json list of available sensors. id, name & parameters (json schema?).
+                                    javascript to build form?
+GET svc/listLampDrivers
+  - json list of available lamp drivers. id, name & parameters (json schema?).
+                                    javascript to build form?
+POST svc/config
+  - store json object with the current config.
+GET - svc/status
+  - json describing the current lightstatus. Add current direction and speed?
+
+json-schema for the config.
+
+Webpage for the config.
+- build page from config.
+  - per type of sensor.
+  - per type of lamp.
+- widget for angle.
+- widget for color.
+- add section when adding sensor.
+- create form per type of sensor.
+- change form per type of lamp.
+
+
+For sensors - addDefaultConfig method.
+For lamp drivers - addDefaultConfig method.
+
+
+DONE
+Services:
+GET svc/config
+  - json object with the current config.
+
