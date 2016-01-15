@@ -1,0 +1,20 @@
+body {
+  padding-top: 50px;
+}
+.main {
+  padding: 40px 15px;
+}
+#main {
+  text-align: center;
+}
+.sensor {
+  border-bottom: 2px black solid;
+  padding: 10px 0 10px 0;
+}
+#AddSensor {
+  text-align: center;
+  width: 100%;
+}
+#AddSensor a {
+  font-size: 3em;
+}
