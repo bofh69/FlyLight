@@ -220,6 +220,7 @@ function fillSensorsConfig(config) {
       formGroupPrefix('s' + i + 'type', "Type of Sensor") +
       '<input type="string" readonly="true" id="s' + i + 'type" ' +
               'value="' + d.reader + '">' +
+      '<a class="removeSensor" href="#"><span class="glyphicon glyphicon-remove"></a>' +
       formGroupPostfix() +
       formatForInput('s' + i + 'url', 'URL',
 			'string', d.url) + 
@@ -240,6 +241,14 @@ function fillSensorsConfig(config) {
   sens.push(storedSensorsHTML);
 
   $('#sensors')[0].innerHTML = sens.join("");
+
+  $('.removeSensor').each(function(i, v) {
+    v.onclick = function(e) {
+      e.preventDefault();
+      cfg.windMeeters.splice(i, 1);
+      fillSensorsConfig(cfg.windMeeters);
+    }
+  });
 
   $('#AddSensor a').on('click', function(e) {
     e.preventDefault();
