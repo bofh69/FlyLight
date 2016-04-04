@@ -4,40 +4,38 @@
 // A module to read weather-data (wind direction and speed).
 //
 
-exports.pollServer = function(cfg, cb) {
-    var soap = require("soap");
+var https = require("https");
 
-    soap.createClient(cfg.url, function(err, client) {
-	if(err == null) {
-	    client.GetViVaData(cfg.args, function(err, result) {
-		if(err == null) {
-		    result = result.GetViVaDataResult;
-		    if(result.Felmeddelande != null) {
-			console.log("Got error from GetViVaData call:" + result.Felmeddelande);
-		    } else {
-			var wd = {};
-			wd.name = result.PlatsNamn;
-			result.ViVaData.forEach(function(o) {
-			    o = o.attributes;
-			    if(o.Typ == 'Riktning') {
-				wd.dir = o.Varde;
-			    } else if(o.Typ == 'Medelvind') {
-				wd.avgSpeed = o.Varde;
-			    } else if(o.Typ == 'Bywind') {
-				wd.maxSpeed = o.Varde;
-			    }
-			});
-			if(!wd.avgSpeed) {
-			    console.log("Didn't get wanted data, got:", result.ViVaData);
-			}
-			cb(wd);
-		    }
-		} else {
-		    console.log("Got error: " + err);
-		};
+function parseObject(o) {
+  var result = {};
+
+  o = o.GetSingleStationResult;
+
+  result.dir = o.Samples[1].Heading;
+  result.avgSpeed = o.Samples[1].Value.split(' ')[1];
+  result.maxSpeed = o.Samples[0].Value.split(' ')[1];
+  result.name = o.Name;
+
+  return result;
+}
+
+exports.pollServer = function(cfg, cb) {
+  https.get(cfg.url + cfg.args.PlatsId, function(res) {
+    if (res.statusCode == 200) {
+	try {
+	    var body = "";
+	    res.on('data', function(chunk) {
+		body += chunk;
 	    });
-	} else {
-	    console.log("Got error: " + err);
+	    res.on('end', function() {
+		var wd = parseObject(JSON.parse(body));
+		cb(wd);
+	    });
+	} catch(ex) {
+	    console.log("Got error while parsing weather station '" + cfg.url + "': " + ex);
 	};
-    });
+    }
+  }).on('error', function(e) {
+      console.log("Got error while reading weather station '" + cfg.url + "': " + e.message);
+  });;
 }

@@ -262,7 +262,7 @@ function addSensor(type) {
   var o = {reader: type};
   o.args = {};
   switch(type) {
-    case "viva": o.url = "http://161.54.134.239/vivadata.asmx?WSDL"; o.args.placeId = "1"; break;
+    case "viva": o.url = "https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/"; o.args.placeId = "1"; break;
     case "holfuy": o.url = "http://holfuy.hu/clientraw/s214/clientraw.txt"; break;
     case "areWind": o.url = "http://www.meac.se/sub_2/hummeln/wind.asp"; break;
   }
