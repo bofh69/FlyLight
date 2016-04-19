@@ -59,7 +59,11 @@ exports.init = function(cfg, aggHistory) {
 	  if(!err) {
 	    var cfgName = "config.json";
 	    var backupName = "config.json.old";
-	    fs.unlinkSync(backupName);
+            try {
+	      fs.unlinkSync(backupName);
+            } catch(e) {
+	      console.log("Got error when removing old config file, continuing: " + e);
+            }
 	    fs.linkSync(cfgName, backupName);
 	    fs.renameSync(newName, cfgName);
 	    res.send("OK", function() {
