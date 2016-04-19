@@ -6,25 +6,19 @@
 
 var http = require("http");
 
-function convertKnotToMps(knot)
-{
-  return knot/1.9438444924574;
-}
-
-function parseClientRaw(str) {
+function parseObject(o) {
   var result = {};
 
-  var splitBody = str.split(' ');
-  result.dir = splitBody[3];
-  result.avgSpeed = convertKnotToMps(splitBody[1]);
-  result.maxSpeed = convertKnotToMps(splitBody[2]);
-  result.name = splitBody[32].replace(/_/g, " ");
+  result.dir = o.wind.direction;
+  result.avgSpeed = o.wind.speed;
+  result.maxSpeed = o.wind.gust;
+  result.name = o.stationName;
 
   return result;
 }
 
 exports.pollServer = function(cfg, cb) {
-  http.get(cfg.url, function(res) {
+  http.get(cfg.url + cfg.args.PlatsId, function(res) {
     if (res.statusCode == 200) {
 	try {
 	    var body = "";
@@ -32,7 +26,7 @@ exports.pollServer = function(cfg, cb) {
 		body += chunk;
 	    });
 	    res.on('end', function() {
-		var wd = parseClientRaw(body);
+		var wd = parseObject(JSON.parse(body));
 		cb(wd);
 	    });
 	} catch(ex) {

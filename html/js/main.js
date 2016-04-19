@@ -263,7 +263,7 @@ function addSensor(type) {
   o.args = {};
   switch(type) {
     case "viva": o.url = "https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/"; o.args.placeId = "1"; break;
-    case "holfuy": o.url = "http://holfuy.hu/clientraw/s214/clientraw.txt"; break;
+    case "holfuy": o.url = "http://holfuy.hu/en/takeit/getdata.php?s=s101&m=JSON&tu=C&su=m/s"; break;
     case "areWind": o.url = "http://www.meac.se/sub_2/hummeln/wind.asp"; break;
   }
   o.args.Kommentar = "";
