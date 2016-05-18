@@ -21,6 +21,8 @@ function createWeatherFilter(cfg) {
   filter.cfg = cfg;
 
   filter.accept = function(dir, wind) {
+    dir = parseFloat(dir);
+    wind = parseFloat(wind);
     if(cfg.dirMin < 0) {
       if((dir > cfg.dirMax) &&
          (dir <(cfg.dirMin+360))) {
