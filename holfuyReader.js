@@ -9,6 +9,9 @@ var http = require("http");
 function parseObject(o) {
   var result = {};
 
+  #console.log("Result: ");
+  #console.log(o);
+
   result.dir = o.wind.direction;
   result.avgSpeed = o.wind.speed;
   result.maxSpeed = o.wind.gust;
@@ -18,7 +21,9 @@ function parseObject(o) {
 }
 
 exports.pollServer = function(cfg, cb) {
-  http.get(cfg.url + cfg.args.PlatsId, function(res) {
+  var url = cfg.url + cfg.args.PlatsId;
+  #console.log(url);
+  http.get(url, function(res) {
     if (res.statusCode == 200) {
 	try {
 	    var body = "";
