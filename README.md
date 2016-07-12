@@ -41,7 +41,7 @@ Our software will use the broadcast address to communicate with the WiFi bridge 
 
 ## Prebuilt image for the Raspberry PI
 A prebuilt image can be downloaded from:
-http://1drv.ms/1mi205H
+https://1drv.ms/u/s!Aj4itS-J3XxahVG5TJr-qc3OnYRN
  
 A new feature is that we have a web interface to config the wind settings. Steer your browser to http://xxx.xxx.xxx.xxx:3000 Replace xxx.xxx.xxx.xxx with your IP-address to the Raspberry.
 
