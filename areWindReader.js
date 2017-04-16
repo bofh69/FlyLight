@@ -1,5 +1,5 @@
 //
-// # holfuyReader
+// # areWindReader
 //
 // A module to read weather-data (wind direction and speed).
 //
