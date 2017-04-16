@@ -68,10 +68,12 @@ function createHistory(filter) {
 function pollServer(cfg, history) {
     var reader = require("./" + cfg.reader + "Reader");
     reader.pollServer(cfg, function(wd) {
-	console.log("Station name: ", wd.name);
-	console.log("Current direction: ", wd.dir);
-	console.log("Current avg: ", wd.avgSpeed);
-	history.addSample(wd.dir, wd.avgSpeed);
+	if(wd) {
+	    console.log("Station name: ", wd.name);
+	    console.log("Current direction: ", wd.dir);
+	    console.log("Current avg: ", wd.avgSpeed);
+	    history.addSample(wd.dir, wd.avgSpeed);
+	}
     });
 }
 

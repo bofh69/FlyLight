@@ -9,8 +9,11 @@ var http = require("http");
 function parseObject(o) {
   var result = {};
 
-  // console.log("Result: ");
-  // console.log(o);
+  if(o.error) {
+    console.log("Got error from holfuy station: ");
+    console.log(o);
+    return null;
+  }
 
   result.dir = o.wind.direction;
   result.avgSpeed = o.wind.speed;
@@ -31,6 +34,7 @@ exports.pollServer = function(cfg, cb) {
 		body += chunk;
 	    });
 	    res.on('end', function() {
+	        // console.log(body);
 		var wd = parseObject(JSON.parse(body));
 		cb(wd);
 	    });
