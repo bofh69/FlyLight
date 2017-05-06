@@ -16,6 +16,7 @@ function parseClientRaw(str) {
 
   var splitBody = str.split(' ');
   result.dir = splitBody[3];
+  result.temp = splitBody[4];
   result.avgSpeed = convertKnotToMps(splitBody[1]);
   result.maxSpeed = convertKnotToMps(splitBody[2]);
   result.name = splitBody[32].replace(/_/g, " ");
