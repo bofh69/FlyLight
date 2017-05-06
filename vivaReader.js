@@ -15,6 +15,7 @@ function parseObject(o) {
   result.avgSpeed = o.Samples[1].Value.split(' ')[1];
   result.maxSpeed = o.Samples[0].Value.split(' ')[1];
   result.name = o.Name;
+  result.temp = 20; // They don't say.
 
   return result;
 }
