@@ -19,6 +19,7 @@ function parseObject(o) {
   result.avgSpeed = o.wind.speed;
   result.maxSpeed = o.wind.gust;
   result.name = o.stationName;
+  result.temp = o.temperature;
 
   return result;
 }
