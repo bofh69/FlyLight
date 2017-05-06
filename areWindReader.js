@@ -61,7 +61,10 @@ function parseBody(body) {
 	
 	var child = getNodeById(document, "meac_main_box");
 	var text = getNodeFromPath(child, "table/tbody/tr[2]/td[1]/div[3]/#text").value;
-    result.avgSpeed = text.split(' ')[0];
+	result.avgSpeed = text.split(' ')[0];
+
+	var text = getNodeFromPath(child, "table/tbody/tr[2]/td[2]/div[3]/#text").value;
+	result.temp = text.split(' ')[0];
     
 	var text = getNodeFromPath(child, "table/tbody/tr[2]/td[3]/div[3]/#text").value;
     result.dir = text.substr(0, text.length-1);
