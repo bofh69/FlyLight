@@ -1,12 +1,19 @@
 {
    "maxHistory" : "15",
+   "user" : "root",
    "passwd" : "root",
+   "mode" : "wind",
+   "tempConfig" : {
+      "minTemp" : -10,
+      "maxTemp" : 30
+   },
    "lamp" : {
-      "channel" : "1",
+      "channel" : 1,
       "yellowColour" : 128,
       "driver" : "milightRGBW",
       "greenColour" : 96,
       "redColour" : 176,
+      "tempColors" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       "port" : "8899",
       "addr" : "255.255.255.255"
    },
@@ -69,6 +76,5 @@
          "url" : "http://holfuy.com/clientraw/s214/clientraw.txt",
          "dirMin" : "0"
       }
-   ],
-   "user" : "root"
+   ]
 }
