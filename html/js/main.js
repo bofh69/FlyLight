@@ -121,6 +121,14 @@ function convertLampTypeToDriver(val) {
   console.error("Unknown lamp type " + val);
 }
 
+function convertMode(val) {
+  switch(val) {
+    case "Wind mode": return "wind";
+    case "Temp mode": return "temp";
+  }
+  console.error("Unknown mode: " + val);
+}
+
 function selected(value, desiredValue) {
   if(value == desiredValue) return " selected ";
   return "";
@@ -173,6 +181,9 @@ function formatForSelect(id, label, value, values)
 
 function fillLampConfig(config) {
   $('#lampConfig')[0].innerHTML =
+  formatForSelect('mode', 'Mode', config.mode,
+                     [['wind', 'Wind mode'],
+                      ['temp', 'Temp mode']]) +
   formatForInput('minutesToConsider', 'Minutes to Consider',
                     'number', config.maxHistory) + 
   formatForSelect('lampType', 'Lamp Type', config.lamp.driver,
@@ -184,12 +195,17 @@ function fillLampConfig(config) {
                     'text', config.lamp.addr) + 
   formatForInput('lampPort', 'TCP-Port',
                     'text', config.lamp.port, 1, 65535) + 
+  formatForInput('minTemp', 'Min Temp',
+                    'text', config.tempConfig.minTemp, 1, 65535) + 
+  formatForInput('maxTemp', 'Max Temp',
+                    'text', config.tempConfig.maxTemp, 1, 65535) + 
   formatForInput('lampNoFlyColour', 'No-fly Colour',
                     'color', convertToRGB(config.lamp.redColour)) + 
   formatForInput('lampUnknownColour', 'Unknown-flyability Colour',
                     'color', convertToRGB(config.lamp.yellowColour)) + 
   formatForInput('lampFlyColour', 'Fly Colour',
                     'color', convertToRGB(config.lamp.greenColour));
+  // TODO config.lamp.tempColors
 
   $('input[type="color"]').on('change', function(e) {
    var c = e.currentTarget.value;
@@ -208,7 +224,7 @@ function fillSensorsConfig(config) {
   var sens = [];
   $.each(config, function(i, d) {
     var extra = "";
-    if(d.reader == "viva") {
+    if(d.reader == "viva" || d.reader == "holfuy") {
       extra = 
 	formatForInput('s' + i + 'PlaceId', 'Id of sensor',
 			  'number', d.args.PlatsId, 0);
@@ -263,7 +279,7 @@ function addSensor(type) {
   o.args = {};
   switch(type) {
     case "viva": o.url = "https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/"; o.args.placeId = "1"; break;
-    case "holfuy": o.url = "http://holfuy.hu/en/takeit/getdata.php?s=s101&pw=PASSWORD&m=JSON&tu=C&su=m/s"; break;
+    case "holfuy": o.url = "http://holfuy.hu/en/takeit/getdata.php?s=s101&pw=PASSWORD&m=JSON&tu=C&su=m/s"; o.args.placeId = "1"; break;
     case "oldHolfuy": o.url = "http://holfuy.com/clientraw/s214/clientraw.txt"; break;
     case "areWind": o.url = "http://www.meac.se/sub_2/hummeln/wind.asp"; break;
   }
@@ -281,6 +297,10 @@ function storeConfig() {
   newCfg.user = cfg.user;
   newCfg.passwd = cfg.passwd;
   newCfg.maxHistory = $('#minutesToConsider')[0].value;
+  newCfg.mode = convertMode($('#mode')[0].value);
+  newCfg.tempConfig = {};
+  newCfg.tempConfig.minTemp = $('#minTemp')[0].value;
+  newCfg.tempConfig.maxTemp = $('#maxTemp')[0].value;
   newCfg.lamp = {};
   newCfg.lamp.driver = convertLampTypeToDriver($('#lampType')[0].value);
   newCfg.lamp.channel = $('#lampChannel')[0].value;
