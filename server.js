@@ -27,27 +27,31 @@ function createWeatherFilter(cfg) {
       if((dir > cfg.dirMax) &&
          (dir <(cfg.dirMin+360))) {
            console.log("Wrong direction", dir, "(" + cfg.dirMin + ", " + cfg.dirMax +")");
-           return false;
+           return 0;
          }
     } else {
       if(dir < cfg.dirMin || dir > cfg.dirMax) {
         console.log("Wrong direction", dir, "(" + cfg.dirMin + ", " + cfg.dirMax +")");
-        return false;
+        return 0;
       }
     }
-      console.log("Windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
-    if((wind < cfg.windMin) || (wind > cfg.windMax)) {
+    console.log("Windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
+    if((wind < cfg.windMin)) {
       console.log("Wrong windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
-      return false;
+      return 0;
+    } else if(wind > cfg.windMax) {
+      // TODO: add support for another max windspeed...
+      console.log("Wrong windspeed", wind, "(" + cfg.windMin + ", " + cfg.windMax +")");
+      return 0;
     }
     
-    return true;
+    return 1;
   };
   
   return filter;
 }
 
-function createHistory(filter) {
+function createWindHistory(filter) {
   var result = {};
   result.history = [];
   result.filter = filter;
@@ -58,9 +62,9 @@ function createHistory(filter) {
   };
   result.isOk = function() {
     return this.history.reduce(function(current, prev) {
-      if(!prev || !current) return false;
-      return true;
-    }, true);
+      if(prev == 0 || current == 0) return 0;
+      return prev | current;
+    }, 1);
   };
   return result;
 }
@@ -72,7 +76,9 @@ function pollServer(cfg, history) {
 	    console.log("Station name: ", wd.name);
 	    console.log("Current direction: ", wd.dir);
 	    console.log("Current avg: ", wd.avgSpeed);
+	    console.log("Current temp: ", wd.temp);
 	    history.addSample(wd.dir, wd.avgSpeed);
+	    history.temp = wd.temp;
 	}
     });
 }
@@ -83,10 +89,23 @@ function initPoller(cfg, history) {
 }
 
 function updateLamp(history) {
-  if(history.isOk()) {
-    lamp.setColour("green", config.lamp.greenColour);
+  if(config.mode == "wind") {
+    if(history.isOk() > 0) {
+      lamp.setColour("green", config.lamp.greenColour);
+    } else {
+      lamp.setColour("red", config.lamp.redColour);
+    }
   } else {
-    lamp.setColour("red", config.lamp.redColour);
+    // Convert history.temp to color gradient.
+    var t = history.getTemp();
+    var min = config.tempConfig.minTemp;
+    var max = config.tempConfig.maxTemp;
+    if (t < min) t = min;
+    if (t > max) t = max;
+    t -= min;
+    var col = Math.floor(config.lamp.tempColors.length * t / (max - min));
+    var col = config.lamp.tempColors[col];
+    lamp.setColour(history.getTemp() + "C (colidx=" + col + ")", col);
   }
 }
 
@@ -99,7 +118,7 @@ lamp.setColour("yellow", config.lamp.yellowColour);
 var history = [];
 
 config.windMeeters.forEach(function (cfg) {
-  var hist = createHistory(createWeatherFilter(cfg));
+  var hist = createWindHistory(createWeatherFilter(cfg));
   history.push(hist);
   initPoller(cfg, hist);
 });
@@ -109,6 +128,9 @@ aggHistory.isOk = function() {
   return history.reduce(function(o, n) {
     return o || n.isOk();
     }, false)
+};
+aggHistory.getTemp = function() {
+  return history[0].temp;
 };
 
 setInterval(function() {updateLamp(aggHistory)}, 60*1000);
