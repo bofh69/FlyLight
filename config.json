@@ -1,80 +1,73 @@
 {
-   "maxHistory" : "15",
-   "user" : "root",
-   "passwd" : "root",
-   "mode" : "wind",
-   "tempConfig" : {
-      "minTemp" : -10,
-      "maxTemp" : 30
-   },
-   "lamp" : {
-      "channel" : 1,
-      "yellowColour" : 128,
-      "driver" : "milightRGBW",
-      "greenColour" : 96,
-      "redColour" : 176,
-      "tempColors" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      "port" : "8899",
-      "addr" : "255.255.255.255"
-   },
-   "windMeeters" : [
-      {
-         "dirMax" : "240",
-         "windMax" : "9",
-         "args" : {
-            "Kommentar" : "",
-	    "PlatsId": "101"
-         },
-         "windMin" : "4",
-         "reader" : "holfuy",
-         "dirMin" : "210",
-         "url" : "http://holfuy.com/en/takeit/getdata.php?pw=PASSWORD&m=JSON&tu=C&su=m/s&s=s"
-      },
-      {
-         "dirMin" : "165",
-         "url" : "https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/",
-         "reader" : "viva",
-         "windMax" : "7",
-         "windMin" : "5",
-         "args" : {
-            "Kommentar" : "Vinga",
-            "PlatsId" : "114"
-         },
-         "dirMax" : "166"
-      },
-      {
-         "url" : "http://www.meac.se/sub_2/hummeln/wind.asp",
-         "dirMin" : "165",
-         "reader" : "areWind",
-         "args" : {
-            "Kommentar" : "Hummeln"
-         },
-         "windMax" : "10",
-         "windMin" : "1",
-         "dirMax" : "166"
-      },
-      {
-         "dirMax" : "240",
-         "windMax" : "9",
-         "windMin" : "4",
-         "args" : {
-            "Kommentar" : ""
-         },
-         "reader" : "oldHolfuy",
-         "url" : "http://holfuy.com/clientraw/s214/clientraw.txt",
-         "dirMin" : "210"
-      },
-      {
-         "dirMax" : "359",
-         "args" : {
-            "Kommentar" : "Tjoho",
-            "PlatsId" : "214"
-         },
-         "windMax" : "10",
-         "windMin" : "0",
-         "reader" : "oldHolfuy",
-         "url" : "http://holfuy.com/clientraw/s214/clientraw.txt",
-         "dirMin" : "0"
-      }
-   ]
+  "user": "root",
+  "passwd": "root",
+  "maxHistory": "15",
+  "mode": "wind",
+  "tempConfig": {
+    "minTemp": "-10",
+    "maxTemp": "30"
+  },
+  "lamp": {
+    "driver": "milightRGBW",
+    "channel": "1",
+    "addr": "255.255.255.255",
+    "port": "8899",
+    "redColour": 176,
+    "greenColour": 96,
+    "yellowColour": 128,
+    "tempColors": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  },
+  "windMeeters": [{
+    "reader": "holfuy",
+    "url": "http://holfuy.com/en/takeit/getdata.php?pw=PASSWORD&m=JSON&tu=C&su=m/s&s=s",
+    "args": {
+      "Kommentar": "",
+      "PlatsId": "101"
+    },
+    "windMin": "4",
+    "windMax": "9",
+    "dirMin": "210",
+    "dirMax": "240"
+  }, {
+    "reader": "viva",
+    "url": "https://services.viva.sjofartsverket.se:8080/output/vivaoutputservice.svc/vivastation/",
+    "args": {
+      "Kommentar": "Vinga",
+      "PlatsId": "114"
+    },
+    "windMin": "5",
+    "windMax": "7",
+    "dirMin": "165",
+    "dirMax": "166"
+  }, {
+    "reader": "areWind",
+    "url": "http://www.meac.se/sub_2/hummeln/wind.asp",
+    "args": {
+      "Kommentar": "Hummeln"
+    },
+    "windMin": "1",
+    "windMax": "10",
+    "dirMin": "165",
+    "dirMax": "166"
+  }, {
+    "reader": "oldHolfuy",
+    "url": "http://holfuy.com/clientraw/s214/clientraw.txt",
+    "args": {
+      "Kommentar": ""
+    },
+    "windMin": "4",
+    "windMax": "9",
+    "dirMin": "210",
+    "dirMax": "240"
+  }, {
+    "reader": "oldHolfuy",
+    "url": "http://holfuy.com/clientraw/s214/clientraw.txt",
+    "args": {
+      "Kommentar": "Tjoho"
+    },
+    "windMin": "0",
+    "windMax": "10",
+    "dirMin": "0",
+    "dirMax": "359"
+  }]
 }
