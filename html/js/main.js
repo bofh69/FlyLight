@@ -185,24 +185,24 @@ function fillLampConfig(config) {
                      [['wind', 'Wind mode'],
                       ['temp', 'Temp mode']]) +
   formatForInput('minutesToConsider', 'Minutes to Consider',
-                    'number', config.maxHistory) + 
+                    'number', config.maxHistory) +
   formatForSelect('lampType', 'Lamp Type', config.lamp.driver,
                      [['milightRGB', 'RGB'],
                       ['milightRGBW', 'RGBW']]) +
   formatForInput('lampChannel', 'Lamp channel',
-                    'number', config.lamp.channel, 1, 4) + 
+                    'number', config.lamp.channel, 1, 4) +
   formatForInput('lampAddress', 'IP-address',
-                    'text', config.lamp.addr) + 
+                    'text', config.lamp.addr) +
   formatForInput('lampPort', 'TCP-Port',
-                    'text', config.lamp.port, 1, 65535) + 
+                    'text', config.lamp.port, 1, 65535) +
   formatForInput('minTemp', 'Min Temp',
-                    'text', config.tempConfig.minTemp, 1, 65535) + 
+                    'text', config.tempConfig.minTemp, 1, 65535) +
   formatForInput('maxTemp', 'Max Temp',
-                    'text', config.tempConfig.maxTemp, 1, 65535) + 
+                    'text', config.tempConfig.maxTemp, 1, 65535) +
   formatForInput('lampNoFlyColour', 'No-fly Colour',
-                    'color', convertToRGB(config.lamp.redColour)) + 
+                    'color', convertToRGB(config.lamp.redColour)) +
   formatForInput('lampUnknownColour', 'Unknown-flyability Colour',
-                    'color', convertToRGB(config.lamp.yellowColour)) + 
+                    'color', convertToRGB(config.lamp.yellowColour)) +
   formatForInput('lampFlyColour', 'Fly Colour',
                     'color', convertToRGB(config.lamp.greenColour));
   // TODO config.lamp.tempColors
@@ -225,7 +225,7 @@ function fillSensorsConfig(config) {
   $.each(config, function(i, d) {
     var extra = "";
     if(d.reader == "viva" || d.reader == "holfuy") {
-      extra = 
+      extra =
 	formatForInput('s' + i + 'PlaceId', 'Id of sensor',
 			  'number', d.args.PlatsId, 0);
     }
@@ -239,18 +239,18 @@ function fillSensorsConfig(config) {
       '<a class="removeSensor" href="#"><span class="glyphicon glyphicon-remove"></a>' +
       formGroupPostfix() +
       formatForInput('s' + i + 'url', 'URL',
-			'string', d.url) + 
-      extra + 
+			'string', d.url) +
+      extra +
       formatForInput('s' + i + 'comment', 'Comment',
-			'string', comment) + 
+			'string', comment) +
       formatForInput('s' + i + 'windMin', 'Minimum windspeed (m/s)',
-			'number" step="0.5', d.windMin, 0, 25) + 
+			'number" step="0.5', d.windMin, 0, 25) +
       formatForInput('s' + i + 'windMax', 'Maximum windspeed (m/s)',
-			'number" step="0.5', d.windMax, 0, 25) + 
+			'number" step="0.5', d.windMax, 0, 25) +
       formatForInput('s' + i + 'dirMin', 'From direction',
-			'number', d.dirMin, 0, 359) + 
+			'number', d.dirMin, 0, 359) +
       formatForInput('s' + i + 'dirMax', 'To direction',
-			'number', d.dirMax, 0, 359) + 
+			'number', d.dirMax, 0, 359) +
     '</div>'
     );
   });
@@ -309,6 +309,7 @@ function storeConfig() {
   newCfg.lamp.redColour = convertFromRGB($('#lampNoFlyColour')[0].value);
   newCfg.lamp.greenColour = convertFromRGB($('#lampFlyColour')[0].value);
   newCfg.lamp.yellowColour = convertFromRGB($('#lampUnknownColour')[0].value);
+  newCfg.lamp.tempColors = cfg.lamp.tempColors;
 
   newCfg.windMeeters = [];
 
