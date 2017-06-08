@@ -25,7 +25,7 @@
 
 
 var hexToIntChar = function(n) {
-  n = n.charCodeAt(0);
+  n = n.toUpperCase().charCodeAt(0);
   if(n <= 0x39) return n - 0x30;
   return 10 + (n - 65);
   };
@@ -213,6 +213,23 @@ function fillLampConfig(config) {
 });
 }
 
+function fillTempScaleConfig(tempColors) {
+  var rows = [];
+  $.each(tempColors, function(i, d) {
+    console.log("Color: ", d, convertToRGB(d));
+    rows.push('<div class="tempColor">' + formatForInput('ts' + i + 'Colour', '',
+                             'color', convertToRGB(d)) +
+              '</div>');
+  });
+
+  $('#tempScaleConfig')[0].innerHTML = rows.join("");
+
+  $('input[type="color"]').on('change', function(e) {
+    var c = e.currentTarget.value;
+    e.currentTarget.value = convertToRGB(convertFromRGB(c));
+  });
+}
+
 var storedSensorsHTML;
 
 function fillSensorsConfig(config) {
@@ -309,7 +326,14 @@ function storeConfig() {
   newCfg.lamp.redColour = convertFromRGB($('#lampNoFlyColour')[0].value);
   newCfg.lamp.greenColour = convertFromRGB($('#lampFlyColour')[0].value);
   newCfg.lamp.yellowColour = convertFromRGB($('#lampUnknownColour')[0].value);
-  newCfg.lamp.tempColors = cfg.lamp.tempColors;
+  newCfg.lamp.tempColors = [];
+
+  $('.tempColor').each(function(i, s) {
+    var v1 = $('input', s)[0].value;
+    var v2 = convertFromRGB(v1);
+    console.log("Temp Color:", s, v1, v2);
+    newCfg.lamp.tempColors.push(v2);
+  });
 
   newCfg.windMeeters = [];
 
@@ -349,6 +373,7 @@ function fetchConfig() {
   jQuery.getJSON("svc/config", function(config) {
     cfg = config;
     fillLampConfig(config);
+    fillTempScaleConfig(config.lamp.tempColors);
     fillSensorsConfig(config.windMeeters);
   });
 }
