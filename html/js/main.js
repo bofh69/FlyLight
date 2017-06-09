@@ -179,6 +179,17 @@ function formatForSelect(id, label, value, values)
 	  formGroupPostfix();
 }
 
+function tempChangeHandler(e) {
+  var min = 1*$('input[id="minTemp"]')[0].value;
+  var max = 1*$('input[id="maxTemp"]')[0].value;
+  var diff = max - min;
+  var rows = $(".tempColor");
+  var len = rows.length;
+  $.each(rows, function(i, row) {
+    $("> >", row)[0].innerHTML = (min + (i/len)*diff) + "° C";
+  });
+};
+
 function fillLampConfig(config) {
   $('#lampConfig')[0].innerHTML =
   formatForSelect('mode', 'Mode', config.mode,
@@ -207,17 +218,20 @@ function fillLampConfig(config) {
                     'color', convertToRGB(config.lamp.greenColour));
   // TODO config.lamp.tempColors
 
+  $('input[id="minTemp"]').on('change', tempChangeHandler);
+  $('input[id="maxTemp"]').on('change', tempChangeHandler);
+
   $('input[type="color"]').on('change', function(e) {
-   var c = e.currentTarget.value;
-   e.currentTarget.value = convertToRGB(convertFromRGB(c));
-});
+    var c = e.currentTarget.value;
+    e.currentTarget.value = convertToRGB(convertFromRGB(c));
+  });
 }
 
-function fillTempScaleConfig(tempColors) {
+function fillTempScaleConfig(min, max, tempColors) {
   var rows = [];
   $.each(tempColors, function(i, d) {
-    console.log("Color: ", d, convertToRGB(d));
-    rows.push('<div class="tempColor">' + formatForInput('ts' + i + 'Colour', '',
+    rows.push('<div class="tempColor">' +
+              formatForInput('ts' + i + 'Colour', "",
                              'color', convertToRGB(d)) +
               '</div>');
   });
@@ -228,6 +242,8 @@ function fillTempScaleConfig(tempColors) {
     var c = e.currentTarget.value;
     e.currentTarget.value = convertToRGB(convertFromRGB(c));
   });
+
+  tempChangeHandler(null);
 }
 
 var storedSensorsHTML;
@@ -331,7 +347,6 @@ function storeConfig() {
   $('.tempColor').each(function(i, s) {
     var v1 = $('input', s)[0].value;
     var v2 = convertFromRGB(v1);
-    console.log("Temp Color:", s, v1, v2);
     newCfg.lamp.tempColors.push(v2);
   });
 
@@ -373,7 +388,9 @@ function fetchConfig() {
   jQuery.getJSON("svc/config", function(config) {
     cfg = config;
     fillLampConfig(config);
-    fillTempScaleConfig(config.lamp.tempColors);
+    fillTempScaleConfig(config.tempConfig.minTemp,
+                        config.tempConfig.maxTemp,
+                        config.lamp.tempColors);
     fillSensorsConfig(config.windMeeters);
   });
 }
