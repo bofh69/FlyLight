@@ -10,7 +10,7 @@
   "author": "Sebastian Andersson <sebastian@bittr.nu>",
   "license": "GPL-3.0",
   "dependencies": {
-    "bootstrap": "^3.3.6",
+    "bootstrap": "~>4.1.2",
     "express": "~3.2.6",
     "express-ifttt-webhook": "~0.2.3",
     "forever": "^0.15.1",
